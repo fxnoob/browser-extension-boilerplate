@@ -28,6 +28,6 @@
 
 >  ### *  Write chrome extension's background scripts code in `src/background.js`
 
-> ### * Write chrome extension's popup page codes in `popup-page` reactjs directory system. 
+> ### * Write chrome extension's popup page codes in `popup-page` Reactjs directory system. 
  
- > ### *  Write chrome extension's content scripts codes in `content-scripts` reactjs directory system. 
+ > ### *  Write chrome extension's content scripts codes in `content-scripts` Reactjs directory system. 
