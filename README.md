@@ -1,33 +1,33 @@
-# minimal-react-webpack-babel-setup
+# A Chrome extension boilerplate.
 
-[![Build Status](https://travis-ci.org/rwieruch/minimal-react-webpack-babel-setup.svg?branch=master)](https://travis-ci.org/rwieruch/minimal-react-webpack-babel-setup) [![Slack](https://slack-the-road-to-learn-react.wieruch.com/badge.svg)](https://slack-the-road-to-learn-react.wieruch.com/) [![Greenkeeper badge](https://badges.greenkeeper.io/rwieruch/minimal-react-webpack-babel-setup.svg)](https://greenkeeper.io/)
+## Basic Usage
 
-Read how to set it up yourself: [React with Webpack Tutorial](https://www.robinwieruch.de/minimal-react-webpack-babel-setup/).
+``` 
+    yarn
+    yarn dev
+```
 
-[![Edit minimal-react-webpack-babel-setup](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/github/rwieruch/minimal-react-webpack-babel-setup/tree/master/?fontsize=14)
+## features: 
+> 1. Support for  ES7 ( with Babel and polyfill)
+> 2. popup page with reactjs and material ui framework
+> 3. Content script with reactjs and material ui framework
+> 4. Bundling (webpack)
 
-## Features
+## directory structure
+> *    `src/` is root directory for a chrome extension. it includes `manifest.json` file and other static stuff.
 
-* React 16
-* Webpack 4
-* Babel 7
-* Hot Module Replacement
+> *    `src/background.js`  is main background js  file for the chrome extension.
+ 
+ > *  `popup-page` is the directory which includes react js setup for popup page.
+ 
+ > *  `content-scripts` is the directory  directory which includes react js setup for content script.
+ 
+ > *  `src/utils` is the directory for utilities that can be written in es6,es7 or es8...
+ 
+## How to extend ? 
 
-## DIY Add-Ons
+>   *  Write chrome extension's background scripts code in `src/background.js`
 
-* [ESLint](https://www.robinwieruch.de/react-eslint-webpack-babel/)
-* [SVG Icons](https://www.robinwieruch.de/react-svg-icon-components/)
-* [Fonts Support](https://www.robinwieruch.de/webpack-font/)
-* [Images Support](https://www.robinwieruch.de/webpack-images/)
-
-## Alternatives
-
-* [Advanced React Webpack Babel Setup](https://github.com/rwieruch/advanced-react-webpack-babel-setup)
-
-## Installation
-
-* `git clone git@github.com:rwieruch/minimal-react-webpack-babel-setup.git`
-* cd minimal-react-webpack-babel-setup
-* npm install
-* npm start
-* visit `http://localhost:8080/`
+>  * Write chrome extension's popup page codes in `popup-page` Reactjs directory system. 
+ 
+ >  *  Write chrome extension's content scripts codes in `content-scripts` Reactjs directory system. 
