@@ -1,8 +1,8 @@
 {
-  "name": "__MSG_appName__",
+  "name": "Swipe hand in the air",
   "version": "0.0.1",
   "manifest_version": 2,
-  "description": "__MSG_appDescription__",
+  "description": "swipe hand gesture recognition",
   "icons": {
     "16": "images/icon-16.png",
     "128": "images/icon-128.png"
@@ -25,5 +25,6 @@
     },
     "default_title": "history remover",
     "default_popup": "popup.html"
-  }
+  },
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }
