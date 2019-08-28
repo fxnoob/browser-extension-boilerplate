@@ -1,57 +1,40 @@
-const path = require('path');
+const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-    entry: {
-        content_script: './content-scripts/App.jsx',
-        background: './src/background.js',
-        popup: './popup-page/App.jsx'
-    },
-    module: {
-        rules: [
-            {
-                test: /\.((jsx)|(jpg))$/,
-                exclude: /(node_modules|bower_components)/,
-                loader: 'babel-loader',
-                options: {
-                    presets: ['@babel/preset-react', '@babel/preset-env']
-                }
-            } ,
-            {
-                test: /src\.m?((js)|(jpg))$/,
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                        presets: ['@babel/preset-env']
-                    }
-                }
-            },
-            {
-                test: /src\.m?((js)|(jpg))$/,
-                use: {
-                    loader: 'file-loader',
-                    options: {
-                        presets: ['@babel/preset-env']
-                    }
-                }
-            }
-        ],
-    },
-    plugins: [
-        new CopyWebpackPlugin([
-            { from: './popup-page/popup.html', force: true } ,
-            { from: './src/app/', force: true }
-        ], {})
-    ] ,
-    output: {
-        path: path.join(__dirname, 'dist'),
-        filename: '[name].bundle.js'
-    },
-    resolve: {
-        modules: [
-            "./src/data" ,
-            "node_modules"
-        ],
-        extensions: [".js" , ".jsx",".json",".jpg"]
-    }
+  entry: {
+    content_script: './content-scripts/App.jsx',
+    background: './src/background.js',
+    popup: './popup-page/App.jsx',
+    option: './option-page/App.jsx',
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        use: ['babel-loader']
+      }
+    ]
+  },
+  resolve: {
+    extensions: ['*', '.js', '.jsx']
+  },
+  output: {
+    path: __dirname + '/dist',
+    publicPath: '/',
+    filename: '[name].bundle.js'
+  },
+  plugins: [
+    new CopyWebpackPlugin([
+      { from: './popup-page/popup.html', force: true } ,
+      { from: './option-page/option.html', force: true } ,
+      { from: './src/app/', force: true }
+    ], {}),
+    new webpack.HotModuleReplacementPlugin()
+  ],
+  devServer: {
+    contentBase: './dist',
+    hot: true
+  }
 };
