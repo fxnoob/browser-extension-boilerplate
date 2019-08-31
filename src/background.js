@@ -1,34 +1,24 @@
-import "@babel/polyfill"
+import "@babel/polyfill";
 
-let AppInitState = 0 // it means app is off on startup
+let AppInitState = 0; // it means app is off on startup
 
 class Main {
-    constructor() {
+  constructor() {}
+  popUpClickSetup() {
+    chrome.browserAction.onClicked.addListener(tab => {
+      if (this.toggleApp()) {
+      } else {
+        this.stopApp();
+      }
+    });
+  }
 
-    }
-    popUpClickSetup() {
-        chrome
-            .browserAction
-            .onClicked
-            .addListener((tab) => {
-                if(this.toggleApp()) {
+  toggleApp = () => {
+    AppInitState = AppInitState ? 0 : 1;
+    return AppInitState;
+  };
 
-                } else {
-                    this.stopApp()
-                }
-            });
-    }
-
-    toggleApp = () => {
-      AppInitState = AppInitState?0:1;
-      return AppInitState
-    }
-
-    stopApp = () => {
-       AppInitState = 0
-    }
-
+  stopApp = () => {
+    AppInitState = 0;
+  };
 }
-
-
-

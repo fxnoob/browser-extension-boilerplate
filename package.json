@@ -8,6 +8,11 @@
     "dev": "webpack --watch --progress --colors --config webpack.config.js --mode=development",
     "test": "webpack --progress --colors --config webpack.config.js --mode=production"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -22,6 +27,7 @@
     "copy-webpack-plugin": "^5.0.4",
     "file-loader": "^4.2.0",
     "image-webpack-loader": "^5.0.0",
+    "prettier": "1.18.2",
     "react-hot-loader": "^4.12.10",
     "webpack": "^4.39.1",
     "webpack-cli": "^3.3.6",
