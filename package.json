@@ -35,6 +35,7 @@
     "babel-loader": "^8.0.6",
     "copy-webpack-plugin": "^5.0.4",
     "file-loader": "^4.2.0",
+    "gh-pages": "^2.1.1",
     "husky": "^3.0.9",
     "image-webpack-loader": "^5.0.0",
     "jsdoc": "^3.6.3",
