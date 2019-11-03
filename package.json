@@ -6,7 +6,12 @@
   "scripts": {
     "start": "webpack-dev-server --config ./webpack.config.js --mode development",
     "dev": "webpack --watch --progress --colors --config webpack.config.js --mode=development",
-    "test": "webpack --progress --colors --config webpack.config.js --mode=production"
+    "build": "webpack --progress --colors --config webpack.config.js --mode=production",
+    "prettier_check_src": "prettier --check src/**/*.{js,jsx}",
+    "prettier_check_popup": "prettier --check src/**/*.{js,jsx}",
+    "prettier_check_option": "prettier --check src/**/*.{js,jsx}",
+    "prettier_check_content": "prettier --check src/**/*.{js,jsx}",
+    "test": "yarn prettier_check_src && yarn prettier_check_popup && yarn prettier_check_option && yarn prettier_check_content && yarn build"
   },
   "husky": {
     "hooks": {
@@ -39,6 +44,8 @@
     "@babel/runtime": "^7.5.5",
     "@material-ui/core": "^4.3.3",
     "@material-ui/icons": "^4.2.1",
+    "husky": "^3.0.9",
+    "pretty-quick": "^2.0.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
   }
