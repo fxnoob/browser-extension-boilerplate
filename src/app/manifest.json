@@ -1,23 +1,22 @@
 {
-  "name": "Swipe hand in the air",
+  "name": "chrome-extension-boilerplate",
   "version": "0.0.1",
   "manifest_version": 2,
-  "description": "swipe hand gesture recognition",
+  "description": "description",
   "icons": {
     "16": "images/icon-16.png",
     "128": "images/icon-128.png"
   },
-  "default_locale": "en",
   "background": {
     "scripts": ["background.bundle.js"]
   },
-  "permissions": ["history", "webNavigation", "*://*/*"],
+  "permissions": ["storage", "webNavigation", "*://*/*"],
   "browser_action": {
     "default_icon": {
       "19": "images/icon-19.png",
       "38": "images/icon-38.png"
     },
-    "default_title": "history remover",
+    "default_title": "default title",
     "default_popup": "popup.html"
   },
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"

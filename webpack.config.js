@@ -1,5 +1,6 @@
 const webpack = require("webpack");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const dotenv = require("dotenv").config({ path: __dirname + "/.env" });
 
 module.exports = {
   entry: {
@@ -47,6 +48,9 @@ module.exports = {
       ],
       {}
     ),
+    new webpack.DefinePlugin({
+      "process.env": dotenv.parsed
+    }),
     new webpack.HotModuleReplacementPlugin()
   ],
   devServer: {
