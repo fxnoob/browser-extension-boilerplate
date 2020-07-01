@@ -33,7 +33,7 @@
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.6",
-    "copy-webpack-plugin": "^5.0.4",
+    "copy-webpack-plugin": "^6.0.3",
     "dotenv": "^8.2.0",
     "file-loader": "^4.2.0",
     "gh-pages": "^2.1.1",
