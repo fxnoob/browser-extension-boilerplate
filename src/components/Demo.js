@@ -5,6 +5,6 @@ export default class Index extends React.Component {
     super(props);
   }
   render() {
-    return <div></div>;
+    return <div>Demo</div>;
   }
 }

@@ -1,0 +1,3 @@
+src/services/chrome.js
+src/services/db.js
+src/services/schema.js

@@ -16,7 +16,11 @@ module.exports = (env, options) => {
         {
           test: /\.(js|jsx)$/,
           exclude: /node_modules/,
-          use: ["babel-loader"]
+          use: ["babel-loader", "eslint-loader"]
+        },
+        {
+          test: /\.css$/,
+          use: ["style-loader", "css-loader"]
         },
         {
           test: /\.(gif|png|jpe?g|svg)$/i,
@@ -34,7 +38,7 @@ module.exports = (env, options) => {
       ]
     },
     resolve: {
-      extensions: ["*", ".js", ".jsx"]
+      extensions: ['.mjs', '*', '.js', '.jsx', '.css', '.json']
     },
     output: {
       path: __dirname + "/dist",
