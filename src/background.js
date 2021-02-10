@@ -1,5 +1,6 @@
 import "@babel/polyfill";
-import chromeService from './services/chrome';
+import chromeService, { message } from "./services/chromeService";
+import Routes from "./routes";
 
 let AppInitState = 0; // it means app is off on startup
 
@@ -13,14 +14,15 @@ class Main {
     this.init();
   }
 
-  init = () => {
+  init = async () => {
     this.popUpClickSetup();
-  }
+    await Routes(message);
+  };
 
   popUpClickSetup() {
     chrome.browserAction.onClicked.addListener(() => {
       if (this.toggleApp()) {
-        chromeService.openHelpPage('');
+        chromeService.openHelpPage("");
       } else {
         this.stopApp();
       }

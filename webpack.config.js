@@ -1,4 +1,5 @@
 const webpack = require("webpack");
+const { ESBuildPlugin, ESBuildMinifyPlugin } = require("esbuild-loader");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const dotenv = require("dotenv").config({ path: __dirname + "/.env" });
 const { manifestTransform } = require("./scripts/transform");
@@ -14,9 +15,22 @@ module.exports = (env, options) => {
     module: {
       rules: [
         {
+          test: /\.worker\.js$/,
+          use: { loader: "worker-loader" }
+        },
+        {
           test: /\.(js|jsx)$/,
           exclude: /node_modules/,
-          use: ["babel-loader", "eslint-loader"]
+          use: [
+            {
+              loader: "esbuild-loader",
+              options: {
+                loader: "jsx",
+                target: "es2015"
+              }
+            },
+            "eslint-loader"
+          ]
         },
         {
           test: /\.css$/,
@@ -37,6 +51,10 @@ module.exports = (env, options) => {
         }
       ]
     },
+    optimization: {
+      minimize: true,
+      minimizer: [new ESBuildMinifyPlugin()]
+    },
     resolve: {
       extensions: ['.mjs', '*', '.js', '.jsx', '.css', '.json']
     },
@@ -46,6 +64,7 @@ module.exports = (env, options) => {
       filename: "[name].bundle.js"
     },
     plugins: [
+      new ESBuildPlugin(),
       new CopyWebpackPlugin(
         [
           { from: "./src/popup-page/popup.html", force: true },

@@ -47,7 +47,7 @@ class ChromeApi {
    * @memberof ChromeApi
    */
   createIncognitoWindow = () => {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       chrome.windows.create({ focused: true, incognito: true }, win => {
         resolve(win);
       });
@@ -62,7 +62,7 @@ class ChromeApi {
    * @memberof ChromeApi
    */
   getWindow = winId => {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       chrome.windows.get(winId, info => {
         resolve(info);
       });
@@ -115,22 +115,35 @@ class ChromeApi {
    * @memberof ChromeApi
    */
   getActiveTab = winId => {
-    const config = { active: true };
+    const config = { active: true, currentWindow: true };
     if (winId) {
       config.windowId = winId;
     }
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       chrome.tabs.query(config, tabs => {
         resolve(tabs[0]);
       });
     });
   };
 
-  sendMessageToActiveTab = async payload => {
-    console.log("sendMessageToActiveTab called", payload);
-    const tab = await this.getActiveTab();
-    console.log({ tab });
-    chrome.tabs.sendMessage(tab.id, payload);
+  sendMessageToActiveTab = async (payload, callback) => {
+    try {
+      const tab = await this.getActiveTab();
+      chrome.tabs.sendMessage(tab.id, payload, callback);
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.log(e);
+    }
+    return true;
+  };
+
+  sendMessageToTab = async (id, payload, callback) => {
+    try {
+      chrome.tabs.sendMessage(id, payload, callback);
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.log(e);
+    }
     return true;
   };
 
@@ -142,7 +155,6 @@ class ChromeApi {
 
   shiftToLeftTab = () => {
     this.traverseTabs(tabs => {
-      console.log(tabs, tabs.length, "tabs info");
       let activeTabIndex = -1;
       for (let i = 0; i < tabs.length; i++) {
         if (tabs[i].active) {
@@ -156,6 +168,18 @@ class ChromeApi {
         chrome.tabs.update(tabs[activeTabIndex - 1].id, { highlighted: true });
       }
       chrome.tabs.update(tabs[activeTabIndex].id, { highlighted: false });
+    });
+  };
+
+  takeScreenShot = () => {
+    return new Promise((resolve, reject) => {
+      try {
+        chrome.tabs.captureVisibleTab(screenshotUrl => {
+          resolve(screenshotUrl);
+        });
+      } catch (e) {
+        reject(e);
+      }
     });
   };
 
@@ -179,10 +203,7 @@ class ChromeApi {
 
   closeActiveTab = callback => {
     chrome.tabs.query({ active: true }, tabs => {
-      console.log({ tabs });
-      var url = tabs[0].url;
       const tabId = tabs[0].id;
-      //console.log("URL from main.js", url);
       chrome.tabs.remove(tabId, callback);
     });
   };
@@ -197,19 +218,169 @@ class ChromeApi {
   }
 
   /**
+   *Set Badge color on extension icon
+   * @method
+   * @memberOf ChromeApi
+   */
+  setBadgeColorOnActionIcon(color) {
+    chrome.browserAction.setBadgeBackgroundColor({ color });
+  }
+  /**
    * Open help page
    *
    * @method
    * @memberof ChromeApi
    */
-  openHelpPage = (url = "") => {
-    const helpUrl = chrome.runtime.getURL("option.html") + `?url=${url}`;
+  openHelpPage = (path = "home") => {
+    const helpUrl = `${chrome.runtime.getURL("option.html")}?path=${path}`;
     chrome.tabs.create({ url: helpUrl }, () => {});
   };
-
+  /**
+   * create context menu
+   *
+   * @method
+   * @memberof ChromeApi
+   */
   createContextMenu = opts => {
     return chrome.contextMenus.create(opts);
   };
+
+  /**
+   * tts speak
+   *
+   * @method
+   * @memberof ChromeApi
+   */
+  speak(text, callback) {
+    chrome.tts.speak(text, {
+      requiredEventTypes: ["end"],
+      onEvent: function(event) {
+        if (event.type === "end") {
+          callback();
+        }
+      }
+    });
+  }
+  /**
+   * tts stop
+   *
+   * @method
+   * @memberof ChromeApi
+   */
+  stop() {
+    chrome.tts.stop();
+  }
+  /**
+   * I18n getMessage
+   *
+   * @method
+   * @memberof ChromeApi
+   */
+  getI18nMessage(key) {
+    return chrome.i18n.getMessage(key);
+  }
 }
 const chromeService = new ChromeApi();
+
+/**
+ * Message Passing API Class
+ *
+ * @export
+ * @class MessagePassing
+ */
+class MessagePassing {
+  constructor() {
+    this.routes = {};
+    this.options = {};
+    this.addListener();
+  }
+  /**
+   * set options object for message passing api
+   *
+   * @method
+   * @memberof MessagePassing
+   * @namespace message.on
+   */
+  setOptions(options) {
+    this.options = options;
+  }
+  /**
+   * set callback for different routes (just like express js)
+   *
+   * @method
+   * @memberof MessagePassing
+   * @namespace message.on
+   */
+  on(path, callback) {
+    this.routes[path] = callback;
+  }
+  /**
+   * execute routes callback manually
+   *
+   * @method
+   * @memberof MessagePassing
+   * @namespace message.exec
+   */
+  async exec(path, ...data) {
+    return await this.routes[path](...data);
+  }
+  /**
+   * Listener for message callback if set any
+   *
+   * @method
+   * @memberof MessagePassing
+   * @namespace message.addListener
+   */
+  addListener() {
+    chrome.runtime.onMessage.addListener((req, sender, res) => {
+      try {
+        this.routes[req.path](req, res, this.options);
+      } catch (e) {
+        /* eslint-disable no-console */
+        console.log(e);
+        /* eslint-enable no-console */
+      }
+      return true;
+    });
+  }
+  /**
+   * send message from content script or background page.
+   *
+   * @method
+   * @memberof MessagePassing
+   * @namespace message.sendMessage
+   */
+  sendMessage(path, payload, callback) {
+    const data = payload;
+    data.path = path;
+    chrome.runtime.sendMessage(data, callback);
+  }
+  /**
+   * send message from background page to content script
+   *
+   * @method
+   * @memberof MessagePassing
+   * @namespace message.sendMessageToActiveTab
+   */
+  async sendMessageToActiveTab(path, payload, callback) {
+    const data = payload;
+    data.path = path;
+    await chromeService.sendMessageToActiveTab(data, callback);
+  }
+  /**
+   * send message from background page to content script
+   *
+   * @method
+   * @memberof MessagePassing
+   * @namespace message.sendMessageToTab
+   */
+  async sendMessageToTab(path, id, payload, callback) {
+    const data = payload;
+    data.path = path;
+    await chromeService.sendMessageToTab(id, data, callback);
+  }
+}
+const message = new MessagePassing();
+
+export { message };
 export default chromeService;
