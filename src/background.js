@@ -1,5 +1,8 @@
 import "@babel/polyfill";
-import chromeService, { message } from "./services/chromeService";
+import chromeService from "./services/chromeService";
+import constants from "../constants";
+import db from "./services/dbService";
+import schema from "./services/schema";
 import Routes from "./routes";
 
 let AppInitState = 0; // it means app is off on startup
@@ -11,14 +14,28 @@ let AppInitState = 0; // it means app is off on startup
  */
 class Main {
   constructor() {
-    this.init();
+    // set feedback form url
+    this.setFeedbackFormUrl();
+    this.init().catch(() => {});
   }
 
   init = async () => {
+    await this.initDb();
     this.popUpClickSetup();
-    await Routes(message);
+    await Routes();
   };
-
+  /**
+   * initialize db settings
+   * @method
+   * @memberof Main
+   */
+  initDb = async () => {
+    const res = await db.get("_loaded");
+    if (!res.hasOwnProperty("_loaded")) {
+      await db.set({ _loaded: true, ...schema.data });
+      chromeService.openHelpPage("welcome");
+    }
+  };
   popUpClickSetup() {
     chrome.browserAction.onClicked.addListener(() => {
       if (this.toggleApp()) {
@@ -28,7 +45,6 @@ class Main {
       }
     });
   }
-
   /**
    * toggle app
    *
@@ -39,7 +55,6 @@ class Main {
     AppInitState = AppInitState ? 0 : 1;
     return AppInitState;
   };
-
   /**
    * stop app
    *
@@ -48,6 +63,12 @@ class Main {
    */
   stopApp = () => {
     AppInitState = 0;
+  };
+  /**
+   *set feedback form url shown while uninstalling
+   * */
+  setFeedbackFormUrl = () => {
+    chrome.runtime.setUninstallURL(constants.support.uninstallFeedbackForm);
   };
 }
 

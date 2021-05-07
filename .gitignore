@@ -4,3 +4,4 @@ babel
 babelscripts@1.0.0
 dist/
 out/
+dist.zip

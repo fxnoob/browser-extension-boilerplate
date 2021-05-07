@@ -2,8 +2,8 @@ const constants = require("../constants");
 const pkg = require("../package.json");
 // options: webpack configs
 const manifestTransform = (content, path, options) => {
-  const { mode } = options;
-  const modify = buffer => {
+  const { mode, browser } = options;
+  const modify = (buffer) => {
     // copy-webpack-plugin passes a buffer
     const manifest = JSON.parse(buffer.toString());
     // make any modifications you like, such as
@@ -11,6 +11,12 @@ const manifestTransform = (content, path, options) => {
       manifest.key = constants.appConfig.key;
     }
     manifest.version = pkg.version;
+    // if browser is firefox then put gecko id and other specific stuff
+    if (browser == "firefox") {
+      Object.keys(constants.browser.firefox.manifest).map((key) => {
+        manifest[key] = constants.browser.firefox.manifest[key];
+      });
+    }
     // pretty print to JSON with two spaces
     return JSON.stringify(manifest, null, 2);
   };
@@ -18,5 +24,5 @@ const manifestTransform = (content, path, options) => {
 };
 
 module.exports = {
-  manifestTransform
+  manifestTransform,
 };

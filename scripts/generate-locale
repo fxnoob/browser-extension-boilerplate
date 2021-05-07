@@ -1,0 +1,3 @@
+#! /usr/bin/env node
+require = require('esm')(module);
+require('./generateLocale').cli(process.argv);

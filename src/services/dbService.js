@@ -3,9 +3,9 @@
  * Chrome storage abstraction class
  *
  * @export
- * @class Db
+ * @class DbService
  */
-class Db {
+class DbService {
   /**
    * Set a value in storage
    *
@@ -80,7 +80,7 @@ class Db {
   remove(keyStr) {
     return new Promise((resolve, reject) => {
       try {
-        chrome.storage.local.remove(keyStr, res => {
+        chrome.storage.local.remove(keyStr, () => {
           resolve(keyStr);
         });
       } catch (e) {
@@ -89,5 +89,5 @@ class Db {
     });
   }
 }
-const db = new Db();
+const db = new DbService();
 export default db;

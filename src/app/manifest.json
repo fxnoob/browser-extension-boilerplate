@@ -10,6 +10,7 @@
   "background": {
     "scripts": ["background.bundle.js"]
   },
+  "default_locale": "en",
   "browser_action": {
     "default_title": "Chrome extension",
     "default_icon": "images/icon-128.png",

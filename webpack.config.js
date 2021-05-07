@@ -7,7 +7,7 @@ const { manifestTransform } = require("./scripts/transform");
 module.exports = (env, options) => {
   return {
     entry: {
-      content_script: "./src/content-scripts/App.jsx",
+      content_script: "./src/content-scripts/index.jsx",
       background: "./src/background.js",
       popup: "./src/popup-page/App.jsx",
       option: "./src/option-page/App.jsx"
@@ -74,7 +74,7 @@ module.exports = (env, options) => {
         {}
       ),
       new webpack.DefinePlugin({
-        "process.env": dotenv.parsed
+        "process.env": JSON.stringify(dotenv.parsed)
       }),
       new CopyWebpackPlugin([
         {
