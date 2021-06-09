@@ -58,7 +58,7 @@
     "file-loader": "^4.2.0",
     "gh-pages": "^2.1.1",
     "husky": "^3.0.9",
-    "image-webpack-loader": "^5.0.0",
+    "image-webpack-loader": "^7.0.1",
     "inquirer": "^8.1.0",
     "jsdoc": "^3.6.3",
     "node-google-translate-skidz": "^1.1.2",
