@@ -12,5 +12,5 @@ class Schema {
     this.data = data;
   }
 }
-const schema  = Schema();
+const schema  = new Schema();
 export default schema;

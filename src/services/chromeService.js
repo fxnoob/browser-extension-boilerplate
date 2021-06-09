@@ -42,17 +42,6 @@ class ChromeApi {
     chrome.tabs.sendMessage(tab.id, payload, callback);
     return true;
   };
-  takeScreenShot = () => {
-    return new Promise((resolve, reject) => {
-      try {
-        chrome.tabs.captureVisibleTab((screenshotUrl) => {
-          resolve(screenshotUrl);
-        });
-      } catch (e) {
-        reject(e);
-      }
-    });
-  };
   /**
    *Set Badge on extension icon
    * @method

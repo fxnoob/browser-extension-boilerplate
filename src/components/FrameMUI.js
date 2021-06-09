@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React from "react";
+import { useState, useRef, useCallback } from "react";
 import { create } from "jss";
 import { useTheme, jssPreset, StylesProvider } from "@material-ui/core/styles";
 import NoSsr from "@material-ui/core/NoSsr";
@@ -8,11 +8,11 @@ import IFrame from "react-frame-component";
 function FrameComponent(props) {
   const { children, ...other } = props;
   const theme = useTheme();
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     ready: false
   });
-  const instanceRef = React.useRef();
-  const handleRef = React.useCallback(ref => {
+  const instanceRef = useRef();
+  const handleRef = useCallback(ref => {
     instanceRef.current = {
       contentDocument: ref ? ref.node.contentDocument : null,
       contentWindow: ref ? ref.node.contentWindow : null

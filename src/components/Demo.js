@@ -1,10 +1,5 @@
-import React from "react";
-
-export default class Index extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    return <div>Demo</div>;
-  }
+export default function Demo() {
+  return (
+    <div>Demo</div>
+  );
 }

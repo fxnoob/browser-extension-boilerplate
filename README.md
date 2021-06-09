@@ -1,9 +1,9 @@
-# A Browser(Chrome/Edge/Firefox/Brave) extension boilerplate.
+# A Browser(Chrome/Edge/Opera/Firefox/Brave) extension boilerplate.
 
 ## Prerequisites
 
-- yarn v1.17.3
-- node v12.3.1
+- yarn 1.22.10
+- node v16.1.0
 
 ## Pre-configurations
 
@@ -76,6 +76,7 @@ yarn build:firefox
 > 8. Some (useful) services e.g. DbService, messagePassing, chromeService and helper functions(helpers).
 > 9. Some (useful) react components e.g. FrameMUI.js (To mount react mui component in iframe in content script).
 > 10. Locale translation using unofficial google translate API (Free version).
+> 11. Comes with React 18(alpha release). you can downgrade it to 17.* but not lower than that. 
 
 ## directory structure
 

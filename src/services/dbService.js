@@ -1,4 +1,4 @@
-
+import schema from "./schema";
 /**
  * Chrome storage abstraction class
  *
@@ -39,7 +39,7 @@ class DbService {
           if (items === undefined) {
             reject(new Error("Error"));
           } else {
-            resolve(items);
+            resolve({ ...schema.data, ...items });
           }
         });
       } catch (e) {
@@ -85,6 +85,20 @@ class DbService {
         });
       } catch (e) {
         reject(e);
+      }
+    });
+  }
+  /**
+   * callback for value change in db for any key
+   * @memberof Db
+   */
+  onChange = (keyToCheck, callback) => {
+    // eslint-disable-next-line no-unused-vars
+    chrome.storage.onChanged.addListener((changes, namespace) => {
+      for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
+        if (keyToCheck == key) {
+          callback(oldValue, newValue);
+        }
       }
     });
   }

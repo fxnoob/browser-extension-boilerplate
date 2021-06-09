@@ -24,6 +24,8 @@
     "plugin:react/recommended"
   ],
   "rules": {
+    "react/jsx-uses-react": "off",
+    "react/react-in-jsx-scope": "off",
     "semi": [2, "always"],
     "indent": ["error", 2],
     "object-curly-spacing": ["error", "always"],

@@ -1,5 +1,4 @@
 const webpack = require("webpack");
-const { ESBuildPlugin, ESBuildMinifyPlugin } = require("esbuild-loader");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const dotenv = require("dotenv").config({ path: __dirname + "/.env" });
 const { manifestTransform } = require("./scripts/transform");
@@ -7,10 +6,10 @@ const { manifestTransform } = require("./scripts/transform");
 module.exports = (env, options) => {
   return {
     entry: {
-      content_script: "./src/content-scripts/index.jsx",
+      content_script: "./src/content-scripts/index.js",
       background: "./src/background.js",
-      popup: "./src/popup-page/App.jsx",
-      option: "./src/option-page/App.jsx"
+      popup: "./src/popup-page/index.js",
+      option: "./src/option-page/index.js"
     },
     module: {
       rules: [
@@ -22,13 +21,7 @@ module.exports = (env, options) => {
           test: /\.(js|jsx)$/,
           exclude: /node_modules/,
           use: [
-            {
-              loader: "esbuild-loader",
-              options: {
-                loader: "jsx",
-                target: "es2015"
-              }
-            },
+            'babel-loader',
             "eslint-loader"
           ]
         },
@@ -51,20 +44,18 @@ module.exports = (env, options) => {
         }
       ]
     },
-    optimization: {
-      minimize: true,
-      minimizer: [new ESBuildMinifyPlugin()]
-    },
     resolve: {
-      extensions: ['.mjs', '*', '.js', '.jsx', '.css', '.json']
+      extensions: ['.mjs', '*', '.js', '.jsx', '.css', '.json'],
     },
     output: {
       path: __dirname + "/dist",
       publicPath: "/",
       filename: "[name].bundle.js"
     },
+    optimization: {
+      minimize: options.mode === "production",
+    },
     plugins: [
-      new ESBuildPlugin(),
       new CopyWebpackPlugin(
         [
           { from: "./src/popup-page/popup.html", force: true },
@@ -74,7 +65,7 @@ module.exports = (env, options) => {
         {}
       ),
       new webpack.DefinePlugin({
-        "process.env": JSON.stringify(dotenv.parsed)
+        "process.env": JSON.stringify({ ...options, ...dotenv.parsed })
       }),
       new CopyWebpackPlugin([
         {
@@ -84,12 +75,11 @@ module.exports = (env, options) => {
             return manifestTransform(content, path, options);
           }
         }
-      ]),
-      new webpack.HotModuleReplacementPlugin()
+      ])
     ],
     devServer: {
       contentBase: "./dist",
       hot: true
-    }
+    },
   };
 };
