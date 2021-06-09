@@ -55,7 +55,7 @@
     "eslint-plugin-react": "^7.20.5",
     "eslint-watch": "^7.0.0",
     "esm": "^3.2.25",
-    "file-loader": "^4.2.0",
+    "file-loader": "^6.2.0",
     "gh-pages": "^2.1.1",
     "husky": "^3.0.9",
     "image-webpack-loader": "^5.0.0",
