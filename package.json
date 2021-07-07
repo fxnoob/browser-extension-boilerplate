@@ -57,7 +57,7 @@
     "esm": "^3.2.25",
     "file-loader": "^4.2.0",
     "gh-pages": "^2.1.1",
-    "husky": "^3.0.9",
+    "husky": "^7.0.1",
     "image-webpack-loader": "^5.0.0",
     "inquirer": "^8.1.0",
     "jsdoc": "^3.6.3",
