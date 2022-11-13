@@ -1,4 +1,5 @@
 const webpack = require("webpack");
+const { ESBuildPlugin, ESBuildMinifyPlugin } = require("esbuild-loader");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const dotenv = require("dotenv").config({ path: __dirname + "/.env" });
 const { manifestTransform } = require("./scripts/transform");
@@ -14,10 +15,6 @@ module.exports = (env, options) => {
     module: {
       rules: [
         {
-          test: /\.worker\.js$/,
-          use: { loader: "worker-loader" }
-        },
-        {
           test: /\.(js|jsx)$/,
           exclude: /node_modules/,
           use: [
@@ -27,20 +24,11 @@ module.exports = (env, options) => {
         },
         {
           test: /\.css$/,
-          use: ["style-loader", "css-loader"]
+          use: ["style-loader", "css-loader?modules"]
         },
         {
           test: /\.(gif|png|jpe?g|svg)$/i,
-          use: [
-            "file-loader",
-            {
-              loader: "image-webpack-loader",
-              options: {
-                bypassOnDebug: true, // webpack@1.x
-                disable: true // webpack@2.x and newer
-              }
-            }
-          ]
+          type: 'asset/resource'
         }
       ]
     },
@@ -53,9 +41,11 @@ module.exports = (env, options) => {
       filename: "[name].bundle.js"
     },
     optimization: {
-      minimize: options.mode === "production",
+      minimize: true,
+      minimizer: [new ESBuildMinifyPlugin()]
     },
     plugins: [
+      new ESBuildPlugin(),
       new CopyWebpackPlugin(
         [
           { from: "./src/popup-page/popup.html", force: true },

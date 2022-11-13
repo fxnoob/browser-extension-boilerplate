@@ -10,7 +10,7 @@
     "prebuild": "yarn rm && yarn build:tailwind",
     "rm": "rm -rf dist/",
     "rm:zip": "rm dist.zip",
-    "dev:chromium": "yarn build:tailwind && webpack --stats-children --watch --progress --config chromium.webpack.js --mode=development",
+    "dev:chromium": "yarn build:tailwind && webpack --stats-children --progress --config chromium.webpack.js --mode=development",
     "dev:firefox": "yarn build:tailwind && webpack --watch --progress --config firefox.webpack.js --mode=development",
     "build:chromium": "yarn build:tailwind && webpack --progress --config chromium.webpack.js --mode=production",
     "build:firefox": "yarn build:tailwind && webpack --progress --config firefox.webpack.js --mode=production",
