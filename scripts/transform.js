@@ -12,7 +12,6 @@ const manifestTransform = (content, path, options) => {
       manifest.key = constants.appConfig.key;
     }
     manifest.version = pkg.version;
-    manifest.browser_action.default_title = constants.appConfig.appName;
     // if browser is firefox then put gecko id and other specific stuff
     if (browser === "firefox") {
       Object.keys(constants.browser.firefox.manifest).map((key) => {

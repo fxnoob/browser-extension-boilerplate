@@ -1,4 +1,3 @@
-import "@babel/polyfill";
 import chromeService from "./services/chromeService";
 import constants from "../constants";
 import db from "./services/dbService";

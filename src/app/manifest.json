@@ -1,20 +1,21 @@
 {
   "name": "__MSG_appName__",
   "description": "__MSG_appDescription__",
+  "manifest_version": 3,
   "version": "0.0.0",
-  "permissions": [
-    "storage",
-    "activeTab",
-    "<all_urls>"
-  ],
-  "background": {
-    "scripts": ["background.bundle.js"]
-  },
+  "host_permissions": ["<all_urls>"],
+  "permissions": [ "contextMenus", "storage", "activeTab" ],
   "default_locale": "en",
-  "browser_action": {
-    "default_title": "Chrome extension",
-    "default_icon": "images/icon-128.png",
-    "default_popup": "popup.html"
+  "background": {
+    "service_worker": "background.bundle.js"
+  },
+  "action": {
+    "default_icon": {
+      "16": "images/icon-16.png",
+      "19": "images/icon-19.png",
+      "38": "images/icon-38.png",
+      "128": "images/icon-128.png"
+    }
   },
   "icons": {
     "16": "images/icon-16.png",
@@ -31,5 +32,9 @@
       "run_at": "document_end"
     }
   ],
-  "manifest_version": 2
+  "externally_connectable": {
+    "matches": [
+      "*://localhost/*"
+    ]
+  }
 }
