@@ -1,8 +1,11 @@
 const webpack = require("webpack");
-const { ESBuildPlugin, ESBuildMinifyPlugin } = require("esbuild-loader");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const dotenv = require("dotenv").config({ path: __dirname + "/.env" });
-const { manifestTransform } = require("./scripts/transform");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require("path");
+const { manifestTransform } = require('./scripts/transform');
+
+const buildDirectory = 'dist';
 
 module.exports = (env, options) => {
   return {
@@ -12,19 +15,39 @@ module.exports = (env, options) => {
       popup: "./src/popup-page/index.js",
       option: "./src/option-page/index.js"
     },
+    devtool: 'cheap-module-source-map',
     module: {
       rules: [
         {
           test: /\.(js|jsx)$/,
-          exclude: /node_modules/,
           use: [
-            'babel-loader',
-            "eslint-loader"
-          ]
+            {
+              loader: 'source-map-loader',
+            },
+            {
+              loader: 'babel-loader',
+            },
+          ],
+          exclude: /node_modules/,
         },
         {
-          test: /\.css$/,
-          use: ["style-loader", "css-loader?modules"]
+        // look for .css or .scss files
+          test: /\.(css|scss)$/,
+          // in the `src` directory
+          use: [
+            {
+              loader: 'style-loader',
+            },
+            {
+              loader: 'css-loader',
+            },
+            {
+              loader: 'sass-loader',
+              options: {
+                sourceMap: true,
+              },
+            },
+          ],
         },
         {
           test: /\.(gif|png|jpe?g|svg)$/i,
@@ -36,39 +59,49 @@ module.exports = (env, options) => {
       extensions: ['.mjs', '*', '.js', '.jsx', '.css', '.json'],
     },
     output: {
-      path: __dirname + "/dist",
+      path: __dirname + "/" + buildDirectory,
       publicPath: "/",
       filename: "[name].bundle.js"
     },
-    optimization: {
-      minimize: true,
-      minimizer: [new ESBuildMinifyPlugin()]
-    },
     plugins: [
-      new ESBuildPlugin(),
-      new CopyWebpackPlugin(
-        [
-          { from: "./src/popup-page/popup.html", force: true },
-          { from: "./src/option-page/option.html", force: true },
-          { from: "./src/app/", force: true }
-        ],
-        {}
-      ),
+      new webpack.ProgressPlugin(),
       new webpack.DefinePlugin({
         "process.env": JSON.stringify({ ...options, ...dotenv.parsed })
       }),
-      new CopyWebpackPlugin([
-        {
-          from: "./src/app/manifest.json",
-          force: true,
-          transform(content, path) {
-            return manifestTransform(content, path, options);
-          }
-        }
-      ])
+      new CopyWebpackPlugin({
+        patterns: [
+          {
+            from: './src/app',
+            to: path.join(__dirname, buildDirectory),
+            force: true,
+          },
+          {
+            from: './src/app/manifest.json',
+            to: __dirname + '/' + buildDirectory,
+            force: true,
+            // eslint-disable-next-line no-unused-vars
+            transform: function (content, path) {
+            // generates the manifest file using the package.json information
+              return manifestTransform(content, path, options);
+            },
+          },
+        ],
+      }),
+      new HtmlWebpackPlugin({
+        template: './src/option-page/option.html',
+        filename: 'option.html',
+        chunks: ['options'],
+        cache: false,
+      }),
+      new HtmlWebpackPlugin({
+        template: './src/popup-page/popup.html',
+        filename: 'popup.html',
+        chunks: ['popup'],
+        cache: false,
+      })
     ],
     devServer: {
-      contentBase: "./dist",
+      contentBase: "./" + buildDirectory,
       hot: true
     },
   };
