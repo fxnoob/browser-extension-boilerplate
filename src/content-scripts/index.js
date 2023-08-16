@@ -1,4 +1,4 @@
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import App from "./App";
 import Constants from "../../constants";
 const mountId = Constants.contentScript.mountId;

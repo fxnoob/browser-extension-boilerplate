@@ -4,6 +4,7 @@ const dotenv = require("dotenv").config({ path: __dirname + "/.env" });
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require("path");
 const { manifestTransform } = require('./scripts/transform');
+const ExtReloader = require('@reorx/webpack-ext-reloader');
 
 const buildDirectory = 'dist';
 
@@ -64,6 +65,15 @@ module.exports = (env, options) => {
       filename: "[name].bundle.js"
     },
     plugins: [
+      new ExtReloader({
+        port: 9090, // Which port use to create the server
+        reloadPage: true, // Force the reload of the page also
+        entries: { // The entries used for the content/background scripts or extension pages
+          contentScript: 'content_script',
+          background: 'background',
+          extensionPage: ['popup', 'option', /* and so on ... */],
+        }
+      }),
       new webpack.ProgressPlugin(),
       new webpack.DefinePlugin({
         "process.env": JSON.stringify({ ...options, ...dotenv.parsed })

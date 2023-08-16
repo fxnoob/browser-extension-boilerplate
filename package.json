@@ -41,6 +41,7 @@
     "@babel/preset-env": "7.19.4",
     "@babel/preset-react": "7.18.6",
     "@babel/runtime": "7.20.0",
+    "@reorx/webpack-ext-reloader": "^1.3.0",
     "arg": "5.0.2",
     "babel-eslint": "10.1.0",
     "babel-loader": "^8.2.2",
