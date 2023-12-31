@@ -107,3 +107,11 @@ yarn build:firefox
 > - Write extension's content scripts codes in `src/content-scripts` directory.
 
 > - Write extension's services codes in `src/services` directory.
+
+
+## Extensions made using this boilerplate
+
+* Image to text ocr (https://chromewebstore.google.com/detail/image-to-text-ocr/jgjlejdhmfpimggbicpffmpbnalcnhoo)
+* Voice typing for google chrome (https://chromewebstore.google.com/detail/voice-typing/hmpihaioaacpehkghnkmnmgmihalkmdf)
+
+
